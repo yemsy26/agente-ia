@@ -313,11 +313,19 @@ Si la notas lenta en contestar, baja `pasos_voz` de 6 a 5 en `config.json`.
 | Arrastrarla | La mueves; al soltarla cae al suelo |
 | Un clic | Despierta y da un saltito |
 | Doble clic | Abre la cajita para escribirle |
-| Clic derecho (sobre ella o su icono junto al reloj) | Menú: guía, escribirle, conversar, micrófono, cancelar petición, diagnóstico, voz, cerebro, perfil y acompañamiento, tamaño, gestos, animación, dormir, esconder y salir |
+| Clic derecho (sobre ella o su icono junto al reloj) | Menú: guía, escribirle, conversar, micrófono, cancelar petición, diagnóstico, actualizaciones, voz, cerebro, perfil y acompañamiento, tamaño, gestos, animación, dormir, esconder y salir |
 | Clic en su icono junto al reloj | La esconde o la trae |
 | Ctrl+Alt+C | La llama desde cualquier ventana |
 
 En el menú, «Escuchar siempre mi nombre» controla la escucha fuera de una conversación. Apagado, la llamas con Ctrl+Alt+C para escuchar una petición a demanda. El rato de conversación abierto termina al pasar 45 segundos sin seguir hablándole o al decir «eso es todo».
+
+## Actualizaciones
+
+Chispa puede mirar en GitHub si hay una versión nueva de ella misma. **Por defecto no mira nada**: no tiene repositorio publicado todavía. Cuando se publique, se apunta `"actualizaciones": "dueño/repositorio"` en `config.json` y, desde entonces:
+
+- Al rato de arrancar, mira sola si salió una versión nueva y te lo dice.
+- Menú > **Buscar actualizaciones…** la comprueba al momento: te dice si vas al día o qué versión hay.
+- Abrir la página de descarga espera tu confirmación hablada de siempre («Chispa, confirmo»). **Nada se descarga ni se instala solo**: hasta que la actualización automática esté terminada, la descarga y la instalación del nuevo zip se hacen a mano desde la página de releases.
 
 ## Su cerebro
 
@@ -384,6 +392,7 @@ Ajustes más útiles de `config.json`:
 | `voz` | vacío | La voz elegida (`F1`–`F5` mujer, `M1`–`M5` hombre). Vacío = la más clara |
 | `pasos_voz` | `6` | Calidad de la voz nueva: menos pasos contesta antes, más pasos suena algo mejor |
 | `cache_voz` | `false` | `true` guarda en disco las frases cortas que ya ha dicho para contestar al instante (por defecto no: lo que contesta puede contener datos personales) |
+| `actualizaciones` | vacío | Repositorio de GitHub («dueño/repositorio») para mirar releases nuevas. Vacío = no mira nada |
 | `depurar` | `false` | Permite fragmentos de texto reconocido en el registro para investigar un fallo puntual |
 
 ## Si algo no va bien
@@ -410,6 +419,8 @@ Ajustes más útiles de `config.json`:
 ## Cambios de la versión 0.11
 
 Conversación renovable durante 45 segundos tras cada respuesta, sin dormirse mientras sigue trabajando para ti. Consultas cancelables con límite y aviso de espera. Aperturas verificadas por ventana y foco, incluidas ventanas minimizadas. Registro de fases con privacidad por defecto e informe desde el menú. Whisper CUDA 12 confirmado en las pruebas de esta PC; Ollama solicita GPU y respuestas breves. La activación por nombre de Windows aún necesita probarse con tu voz real.
+
+Detrás de la cortina, esta versión estrena ingeniería: 28 pruebas automáticas, comprobaciones de interfaz sin reflexión, código repartido por responsabilidades (menú de bandeja, oído, vigilia), repositorio git con CI y actualizaciones por releases de GitHub listas para cuando se publique el repositorio.
 
 Se conservan el avatar actual, todas las herramientas útiles, memoria y lecciones, el perfil dulce y las pausas opcionales cada 45 minutos de actividad. El acompañamiento sigue desactivado hasta que lo habilites y cada propuesta requiere aceptación.
 

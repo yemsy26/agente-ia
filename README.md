@@ -9,7 +9,7 @@ La [guía](GUIA.md) enumera las órdenes y los ajustes actuales. Clic derecho > 
 ## Estructura vigente
 
 - `Program.cs`: inicio y una sola instancia por carpeta de datos.
-- `PetApp.cs`: coordinación de ventanas, voz, micrófono, menús, actividad y reposo.
+- `PetApp.cs`: cableado y cuerpo (IBody); `PetApp.Oido.cs`, lo que oye y la atención; `PetApp.Vida.cs`, vigilia y acompañamiento. `TrayMenu.cs` presenta el menú de la bandeja y pide comportamientos con nombre.
 - `Companion.cs`: perfil, detección de actividad de la sesión, contador de pausas, formulario de preferencias y propuestas con consentimiento.
 - `Body/Character.cs`: avatar por capas; las piezas se validan y viajan integradas en el ejecutable. `PetRenderer` expone únicamente ese avatar. `PetForm` anima, escala y mueve la ventana transparente. `Windows.cs` contiene chat y globo.
 - `Voice/Ears.cs`: activación con System.Speech y transcripción de frases libres. `Transcriber.cs`: Whisper local bajo demanda, filtros de silencio y probabilidad de ausencia de habla. `MicBuffer.cs`: últimos segundos de audio en RAM. `ManualRecorder`: una petición explícita hasta el silencio, cancelable y sin depender de Windows Speech. `Mouth`, `NaturalVoice` y `SupertonicVoice`: voz de Windows, Piper y Supertonic ONNX.
@@ -20,6 +20,8 @@ La [guía](GUIA.md) enumera las órdenes y los ajustes actuales. Clic derecho > 
 - `OllamaBrain` y `ClaudeBrain`: proveedores opcionales para peticiones que exceden las reglas. `Guard` revisa afirmaciones sobre acciones y recuerdos.
 - `Reason` y `Allocation`: motor SAT en `dist/razon/razon.exe`; su código Rust permanece en `src/Razon`.
 - `TraceLog` y `SupportDiagnostics`: registro de fases y generación del informe local. `Diagnostics`, `RegressionChecks`, `LaunchChecks`, `InterfaceChecks`, `GpuDiagnostics`, `VoiceLab` y `Exam`: pruebas y mediciones.
+- `Updater`: compara la última release de GitHub con la versión instalada. Inactivo mientras el campo `actualizaciones` de la configuración esté vacío; nada se descarga ni instala sin la confirmación hablada.
+- `src/Chispa.Tests`: pruebas xUnit (arranque real, diario, recordatorios, sesión, actualizador…). `.github/workflows/ci.yml` las compila y ejecuta en cada cambio publicado.
 - `src/Avatar`: taller del diseño actual, que no se ejecuta al usar la app.
 
 ## Fiabilidad y consumo
@@ -54,6 +56,8 @@ Los recordatorios convencionales aún viven en temporizadores de la sesión: cer
 
 `Compilar Chispa.bat` publica sin arrancar. El iniciador preserva una copia del ejecutable reemplazado en `.build`. Conserva las carpetas `voz`, `oido`, `razon` y las bibliotecas nativas junto a `dist/Chispa.exe`.
 
+Las pruebas automáticas se ejecutan con `dotnet test src/Chispa.Tests` y usan una carpeta de datos aislada (`CHISPA_DATOS`), sin tocar la configuración real.
+
 Modos de diagnóstico:
 
 ```text
@@ -87,7 +91,9 @@ La prueba de activación de Windows detectó fallos con frases cortas; se conser
 
 ## Verificación de la versión 0.11
 
-- Comprobaciones automatizadas: recuento final pendiente de la validación de publicación.
+- Pruebas automatizadas: 28 en verde (`dotnet test src/Chispa.Tests`), incluido un arranque real con frases guionadas. Sin reflexión sobre campos privados en las comprobaciones de interfaz.
+- Examen propio: 24 de 50, sin regresión (mismos resultados que antes de la fase de ingeniería). Diagnóstico `--diagnostico --sin-voz`: TODO BIEN. Prueba de interfaz: correcta.
+- Repositorio git local con las fuentes, sin modelos ni artefactos (`dist`, `.build`); workflow de CI en `.github/workflows/ci.yml` para cuando el repositorio se publique en GitHub. Las actualizaciones por releases quedan listas e inactivas hasta entonces.
 - Aperturas reales: Brave y Descargas verificados visibles y al frente. Descargas minimizada antes de la petición quedó restaurada y al frente; no se cerraron ventanas del usuario.
 - Whisper CUDA 12 confirmado por el motor, 3/3 frases sintéticas correctas; comparación con CPU en `.build/gpu-cuda-final.txt` y `.build/gpu-cpu.txt`.
 - Benchmark de Ollama: GPU verificada, dos turnos por la mente real sin quedarse pensando; informes `.build/ollama-rendimiento-0.11.txt` y `.build/conversacion-real.txt`.
