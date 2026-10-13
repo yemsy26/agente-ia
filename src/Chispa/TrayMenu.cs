@@ -75,6 +75,7 @@ internal sealed class TrayMenu : IDisposable
         menu.Items.Add("Escucharme ahora", null, (_, _) => owner.ListenOnce());
         menu.Items.Add("Cancelar petición", null, (_, _) => owner.CancelRequest());
         menu.Items.Add("Diagnóstico: generar informe", null, async (_, _) => await owner.OpenReport());
+        menu.Items.Add("Buscar actualizaciones…", null, (_, _) => owner.CheckUpdates());
         menu.Items.Add("Conversar (sin repetir su nombre)", null, (_, _) => owner.ConverseByMenu());
 
         alwaysListenItem.Checked = cfg.EscuchaContinua;

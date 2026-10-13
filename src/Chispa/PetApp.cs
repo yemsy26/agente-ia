@@ -151,6 +151,14 @@ internal sealed partial class PetApp : ApplicationContext, IBody
                 _ = mind.Hear(phrase);
             });
         }
+
+        // Con repositorio configurado: mira sola, al rato de arrancar, si salió una versión nueva.
+        if (cfg.Actualizaciones.Trim().Length > 0)
+            After(25000, async () =>
+            {
+                if (await Updater.CheckAsync(cfg) is { } found)
+                    Say($"Hay una versión nueva de mí: {found.Version.ToString(3)}. En mi menú, «Buscar actualizaciones» te la muestra.");
+            });
     }
 
     // ---------- IBody: lo que la mente le pide al cuerpo ----------
@@ -336,6 +344,41 @@ internal sealed partial class PetApp : ApplicationContext, IBody
         {
             TraceLog.Failure("informe", ex);
             Say("No pude abrir el informe. El error quedó en el registro.");
+        }
+    }
+
+    // ---------- actualizaciones ----------
+
+    /// <summary>
+    /// Mira en GitHub si hay una versión más nueva y, si la hay, la anuncia y ofrece abrir la página
+    /// de descarga. Abrirla espera la confirmación hablada de siempre; nada se descarga ni se instala solo.
+    /// </summary>
+    internal async void CheckUpdates()
+    {
+        if (cfg.Actualizaciones.Trim().Length == 0)
+        {
+            Say("Aún no tengo repositorio de actualizaciones. Cuando me publiques en GitHub, apunta «dueño/repositorio» en el campo actualizaciones de mi configuración.");
+            return;
+        }
+        Say("Déjame mirar si hay una versión nueva…");
+        try
+        {
+            ReleaseInfo? found = await Updater.CheckAsync(cfg);
+            if (found == null)
+            {
+                Say($"Vas al día: la versión {Updater.ThisVersion} es la más nueva.");
+                return;
+            }
+            Say($"Hay una versión nueva: {found.Value.Version.ToString(3)}.");
+            if (await mind.Confirm($"abrir la página de descarga de la versión {found.Value.Version.ToString(3)}"))
+            {
+                _ = Device.LaunchAsync(found.Value.Url);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Write($"No pude mirar actualizaciones: {ex.Message}");
+            Say("No pude mirar las actualizaciones. Puede que no haya red o que el repositorio no exista todavía.");
         }
     }
 

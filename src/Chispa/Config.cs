@@ -72,6 +72,9 @@ internal sealed class Config
     /// <summary>Apunta en chispa.log cada cosa que oye y cómo la interpretó (para ajustar los umbrales).</summary>
     public bool Depurar { get; set; }
 
+    /// <summary>Actualizaciones: repositorio de GitHub («dueño/repositorio»). Vacío = no mirar releases.</summary>
+    public string Actualizaciones { get; set; } = "";
+
     public static string DataDir =>
         Environment.GetEnvironmentVariable("CHISPA_DATOS") is { Length: > 0 } dir
             ? dir
