@@ -1,0 +1,9 @@
+[package]
+name = "razon"
+version = "0.1.0"
+edition = "2021"
+description = "El motor lógico de Chispa: el resolutor exacto de dpll_check con una entrada por consultas"
+
+[profile.release]
+debug = false
+opt-level = 3

@@ -1,0 +1,19 @@
+# Artefactos de compilación de .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Herramientas y salidas del desarrollo (logs, mediciones, exámenes generados)
+.build/
+examen.txt
+
+# Distribución: modelos, voces y binarios publicados (pesados, no son fuente)
+dist/
+
+# Rust (Razon)
+src/Razon/target/
+
+# Estado local del editor
+.claude/

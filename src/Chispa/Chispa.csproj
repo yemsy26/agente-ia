@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Version>0.11.0</Version>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <!-- Reposo mínimo: sin hilo de GC en segundo plano y sin recursos de otros idiomas -->
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <TieredPGO>false</TieredPGO>
+    <SatelliteResourceLanguages>es</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- La guía de uso viaja dentro del ejecutable: menú «Guía» y «Chispa, ayuda» -->
+    <EmbeddedResource Include="..\..\GUIA.md" LogicalName="GUIA.md" Link="GUIA.md" />
+    <!-- Las piezas del personaje (las genera src\Avatar\monta.py a partir del dibujo original) -->
+    <EmbeddedResource Include="Avatar\*.png;Avatar\figura.json" LogicalName="Avatar/%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- El proyecto de pruebas (src\Chispa.Tests) comprueba las piezas internas sin reflexión. -->
+    <InternalsVisibleTo Include="Chispa.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Anthropic" Version="12.55.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.31.0" />
+    <PackageReference Include="NAudio.WinMM" Version="2.2.1" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
+    <PackageReference Include="Whisper.net" Version="1.9.1" />
+    <PackageReference Include="Whisper.net.Runtime" Version="1.9.1" />
+    <!-- CUDA 12 ya instalado en equipos NVIDIA; se conserva CPU como respaldo. -->
+    <PackageReference Include="Whisper.net.Runtime.Cuda12.Windows" Version="1.9.1" />
+  </ItemGroup>
+
+</Project>
